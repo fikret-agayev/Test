@@ -1,0 +1,123 @@
+#!/bin/bash
+
+args=2
+
+############################################################
+# Help                                                     #
+############################################################
+Help()
+{
+   echo -e "Generate random values.\n"
+   echo -e "Syntax: random.sh [-s|-e|-i|-w filename|-r]\n"
+   echo -e "options:"
+   echo -e "-s            Random number range START value (mandatory)."
+   echo -e "-e            Random number range END value (mandatory)."
+   echo -e "-w filename   Write output to file (optional)."
+   echo -e "-r            Keep randomizing until stopped (optional)."
+   echo -e "-h            Prints this screen.\n"
+   echo -e "Complete command example: random.sh -s 1 -e 10 -w /var/tmp/random.out -r\n"
+}
+
+############################################################
+# Args_PreCheck                                            #
+############################################################
+
+function Args_PreCheck {
+	if [ $2 ] && [ $1 -lt $args ]; then
+		if [ $2 == "-h" ]; then
+		Help
+		exit
+		else
+	    	Help
+	    	exit 1
+		fi
+	fi
+}
+
+############################################################
+# Args_Check                                               #
+############################################################
+
+function Args_Check {
+	if [ $# -lt $args ]; then
+	    Help
+	    exit 1
+	fi
+}
+
+############################################################
+# Randomize                                                #
+############################################################
+function Randomize()
+{
+	echo -e "Generate random values.\n"
+	trap printout SIGINT
+	printout() 
+	{
+    	echo -e "\nThe number generation interrupted by user.\n"
+    	exit
+	}
+	
+	if [[ $ropt == 1 ]]; then
+	echo -e "Press Ctrl-C to interrupt number generation.\n"
+		while :
+		do
+		randomNumber=$( seq $startval $endval | shuf ); 
+		echo -e $randomNumber
+			if [ ! -z $writetofile ]; then
+			echo $randomNumber >> $writetofile
+			fi
+		done
+		else
+		randomNumber=$( seq $startval $endval | shuf );
+		echo -e $randomNumber "\n"
+		echo -e "The number generation finished.\n"
+			if [ ! -z $writetofile ]; then
+			echo $randomNumber >> $writetofile
+			fi
+	fi
+
+}
+
+############################################################
+# Main program                                             #
+############################################################
+
+Args_PreCheck $# $1
+
+startval=
+endval=
+ropt=0
+writetofile=""
+
+while [ "$1" != "" ]; do
+	case "$1" in
+	-s)	shift
+		startval=$1
+		;;
+	-e) 	shift
+		endval=$1
+		;;
+	-r) 	shift
+		ropt=1
+		;;
+	-w) 	shift
+		writetofile=$1
+		;;
+	-h) 	Help
+		shift
+		;;
+	*) 	echo -e "Option $1 not recognized.\n" 
+		Help
+		break
+		;;
+	esac
+	shift
+
+done
+
+Args_Check $startval $endval
+
+Randomize $startval $endval $writetofile
+
+

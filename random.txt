@@ -1,0 +1,42 @@
+Build Instructions
+
+1) put the random.bsh file into any directory, except /tmp
+2) Go to that directory and add execution permission
+chmod +x random.bsh
+3) Run the script with -h option to check syntax.
+./random.bsh -h
+
+Usage
+
+bash random.bsh -s 1 -e 10 -r -w /var/tmp/random.out
+
+-h - this screen
+-s - Random number range START value
+-e - Random number range END value
+-w filename - Write output to file
+-r - Keep randomizing until stopped
+
+Description
+
+The script is used to generate random values between -s and -e range.
+Useful for procedures like OTP (One-Time Password) generation.
+The script has several parameters that can be used to apply more options.
+
+Debug
+
+bash -x random.bsh
+
+Limitations:
+
+Amount of iterations is not defined in the task.
+
+Values -s and -e are not validated.
+Therefore the case like "-e >= -s" can be faced.
+
+coreutils should be installed, as far as "shuf" function used
+
+Tested on RHEL only. getopt has limitations below.
+a) can't handle arguments that are empty strings
+b) can't handle arguments with embedded whitespace
+
+POSIX shell doesn't have these limitations.

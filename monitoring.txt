@@ -1,0 +1,22 @@
+
+Key metrics for alerts on SSL Offloading Server.
+
+CPU load. SSL offloading is CPU consuming feature. Especially, if length of key is longer. 
+Free RAM/Swap on the server.
+NIC statistics.
+SSL Certificate Expiration Date.
+Number of Open TCP Connections.
+Number of file descriptor.
+Proxy SW availability check (watchdogs or 3PP products like Nagios).
+
+Challenges of SSL-Offloading Proxy Server Monitoring.
+
+Key Sizes of Requests. It increases CPU usage.
+Cross-site scripting or SQL injection can be performed thru SSL protocol.
+Subject to DDoS attacks. 
+Monitoring of a monitoring tool and scripts. 
+
+How it can be done.
+
+Depends on the SSL/LB software or hardware installed. Its own or 3PP monitoring tools can be used. 
+Other way is some automated checks using Linux shell scripts. 
